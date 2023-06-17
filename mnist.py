@@ -1,4 +1,4 @@
-
+ï»¿# cording: utf-8
 import os
 from flask import Flask, request, redirect, render_template, flash
 from werkzeug.utils import secure_filename
@@ -19,32 +19,32 @@ app = Flask(__name__)
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-model = load_model('./model.h5', compile=False)#ŠwKÏ‚İƒ‚ƒfƒ‹‚ğƒ[ƒh
+model = load_model('./model.h5', compile=False)
 
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         if 'file' not in request.files:
-            flash('ƒtƒ@ƒCƒ‹‚ª‚ ‚è‚Ü‚¹‚ñ')
+            flash('ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚Šã¾ã›ã‚“')
             return redirect(request.url)
         file = request.files['file']
         if file.filename == '':
-            flash('ƒtƒ@ƒCƒ‹‚ª‚ ‚è‚Ü‚¹‚ñ')
+            flash('ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚Šã¾ã›ã‚“')
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
             filepath = os.path.join(UPLOAD_FOLDER, filename)
 
-            #ó‚¯æ‚Á‚½‰æ‘œ‚ğ“Ç‚İ‚İAnpŒ`®‚É•ÏŠ·
+            #å—ã‘å–ã£ãŸç”»åƒã‚’èª­ã¿è¾¼ã¿ã€npå½¢å¼ã«å¤‰æ›
             img = image.load_img(filepath, grayscale=True, target_size=(image_size,image_size))
             img = image.img_to_array(img)
             data = np.array([img])
-            #•ÏŠ·‚µ‚½ƒf[ƒ^‚ğƒ‚ƒfƒ‹‚É“n‚µ‚Ä—\‘ª‚·‚é
+            #å¤‰æ›ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’ãƒ¢ãƒ‡ãƒ«ã«æ¸¡ã—ã¦äºˆæ¸¬ã™ã‚‹
             result = model.predict(data)[0]
             predicted = result.argmax()
-            pred_answer = "‚±‚ê‚Í " + classes[predicted] + " ‚Å‚·"
+            pred_answer = "ã“ã‚Œã¯ " + classes[predicted] + " ã§ã™"
 
             return render_template("index.html",answer=pred_answer)
 
